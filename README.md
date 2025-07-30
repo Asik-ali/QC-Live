@@ -19,6 +19,17 @@ A powerful, self-hosted streaming application that enables 24/7 live streaming t
 - 4GB+ RAM recommended
 - Sufficient bandwidth for streaming (3-5 Mbps upload per stream)
 
+**Screenshots**
+![Screenshot 2025-07-31 022633](https://github.com/user-attachments/assets/7f12a8f5-7249-455e-8c6b-75a5ddbca08e)
+![Screenshot 2025-07-31 022858](https://github.com/user-attachments/assets/00269445-c2c8-4c48-be89-ac308646552e)
+![Screenshot 2025-07-31 023001](https://github.com/user-attachments/assets/b9200fe6-4889-4f06-a2a3-162a5df9b906)
+![Screenshot 2025-07-31 023038](https://github.com/user-attachments/assets/1e897400-89f7-4fc4-81cd-9c03e972fb23)
+![Screenshot 2025-07-31 022540](https://github.com/user-attachments/assets/28e06e96-f9db-4efe-b017-1c490bbbe7c2)
+![Screenshot 2025-07-31 022747](https://github.com/user-attachments/assets/acd23b90-b910-4f83-ba3b-8730fc1f5fd2)
+
+
+
+
 ## Quick Start
 
 ### 1. Clone the Repository
