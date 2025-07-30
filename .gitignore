@@ -1,65 +1,62 @@
 # Dependencies
 node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+/dist
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Next.js
-.next/
-out/
-
-# Production
-build/
-dist/
-
-# Environment variables
+# Environment files
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
-data/
-
-# Uploads and media files
-uploads/
-public/uploads/
-
-# FFmpeg binaries (large files)
-ffmpeg/
-
-# Logs
-*.log
-logs/
-
-# Runtime data
-pids/
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# IDE files
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 
+# Database
+data/
+*.db
+*.sqlite
+
+# Uploads
+uploads/
+public/uploads/
+
+# FFmpeg
+ffmpeg/
+
+# Logs
+logs/
+*.log
+
+# OS files
+Thumbs.db
+desktop.ini
+
 # Temporary files
-tmp/
-temp/
+*.tmp
+*.temp
+.cache/
