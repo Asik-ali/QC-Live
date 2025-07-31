@@ -312,7 +312,7 @@ export async function stopStream(streamId: number, caller?: string): Promise<voi
           await execAsync(`pkill -9 -f "${stream.rtmp_url}"`);
           console.log(`Used pkill to stop processes with RTMP URL: ${stream.rtmp_url}`);
         } catch (e2) {
-          console.log('pkill attempts failed:', e.message, e2.message);
+          console.log('pkill attempts failed:', (e as Error).message, (e2 as Error).message);
         }
       }
     }
