@@ -167,7 +167,7 @@ function calculateIdealStreams(metrics: {
   const memoryPerStreamGB = 0.5; // Assume 500MB per stream
   
   // Calculate limits based on different resources
-  const cpuLimit = Math.floor((80 - metrics.systemCpu) / Math.max(cpuPerStream, 10)); // Leave 20% CPU headroom
+  const cpuLimit = Math.floor((80 - metrics.cpuPercent) / Math.max(cpuPerStream, 10)); // Leave 20% CPU headroom
   const memoryLimit = Math.floor((metrics.totalMemGB * 0.7) / memoryPerStreamGB); // Use up to 70% of total memory
   const currentLoadLimit = metrics.activeStreams > 2 ? metrics.activeStreams + 1 : 3; // Conservative increase
   
