@@ -27,6 +27,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 interface Stream {
   id: number;
   name: string;
+  video_id: number;
   video_name: string;
   rtmp_url: string;
   quality: string;
