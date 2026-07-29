@@ -39,10 +39,10 @@ export async function generateThumbnail(videoPath: string, thumbnailName: string
       const wingetDir = path.join(localAppData, 'Microsoft', 'WinGet', 'Packages');
       if (require('fs').existsSync(wingetDir)) {
         try {
-          const gyanDirs = require('fs').readdirSync(wingetDir).filter(d => d.startsWith('Gyan.FFmpeg'));
+          const gyanDirs = require('fs').readdirSync(wingetDir).filter((d: string) => d.startsWith('Gyan.FFmpeg'));
           for (const dir of gyanDirs) {
             const binDir = path.join(wingetDir, dir);
-            const versionDirs = require('fs').readdirSync(binDir).filter(d => d.startsWith('ffmpeg-'));
+            const versionDirs = require('fs').readdirSync(binDir).filter((d: string) => d.startsWith('ffmpeg-'));
             for (const vDir of versionDirs) {
               const exePath = path.join(binDir, vDir, 'bin', 'ffmpeg.exe');
               if (require('fs').existsSync(exePath)) {

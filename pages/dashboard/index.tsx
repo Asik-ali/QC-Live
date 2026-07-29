@@ -65,6 +65,15 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     };
   }
 
+  if (session.user.role === 'student') {
+    return {
+      redirect: {
+        destination: '/courses',
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {},
   };
@@ -317,6 +326,11 @@ export default function DashboardPage() {
                   <Link href="/streams">
                     <button className="w-full px-4 py-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-left">
                       Create New Stream
+                    </button>
+                  </Link>
+                  <Link href="/courses">
+                    <button className="w-full px-4 py-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors text-left">
+                      Browse Courses
                     </button>
                   </Link>
                 </div>

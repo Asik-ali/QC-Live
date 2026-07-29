@@ -7,6 +7,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState<'admin' | 'student'>('admin');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -14,9 +15,13 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      await axios.post('/api/auth/login', { username, password });
+      const res = await axios.post('/api/auth/login', { username, password });
       toast.success('Login successful!');
-      router.push('/dashboard');
+      if (res.data.role === 'student') {
+        router.push('/courses');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (error) {
       toast.error('Invalid credentials');
     } finally {
@@ -32,15 +37,37 @@ export default function LoginPage() {
             Asik
           </h2>
           <p className="mt-2 text-center text-sm text-muted-foreground">
-            Sign in to manage your streams
+            Sign in to continue
           </p>
         </div>
+
+        <div className="flex justify-center space-x-2 bg-card border border-border rounded-lg p-1">
+          <button
+            onClick={() => setRole('admin')}
+            className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              role === 'admin'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Admin
+          </button>
+          <button
+            onClick={() => setRole('student')}
+            className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              role === 'student'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Student
+          </button>
+        </div>
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="username" className="sr-only">
-                Username
-              </label>
+              <label htmlFor="username" className="sr-only">Username</label>
               <input
                 id="username"
                 name="username"
@@ -48,15 +75,13 @@ export default function LoginPage() {
                 autoComplete="username"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-border placeholder-muted-foreground text-foreground rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm bg-input"
-                placeholder="Username"
+                placeholder={role === 'admin' ? 'Admin Username' : 'Student Username'}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
+              <label htmlFor="password" className="sr-only">Password</label>
               <input
                 id="password"
                 name="password"
@@ -77,26 +102,21 @@ export default function LoginPage() {
               disabled={isLoading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? 'Signing in...' : `Sign in as ${role === 'admin' ? 'Admin' : 'Student'}`}
             </button>
           </div>
         </form>
       </div>
-      
+
       <div className="mt-auto py-4 text-center">
         <p className="text-xs text-muted-foreground">
           Designed by{' '}
-          <a 
-            href="https://github.com/himanshu-hivecorp" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
+          <a href="https://github.com/himanshu-hivecorp" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
             Himanshu-HIVEcorp
           </a>
         </p>
         <p className="text-xs text-muted-foreground mt-1">
-          © {new Date().getFullYear()} Asik • Dev Edition
+          &copy; {new Date().getFullYear()} Asik &bull; Dev Edition
         </p>
       </div>
     </div>

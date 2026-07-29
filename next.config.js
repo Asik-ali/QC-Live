@@ -8,7 +8,7 @@ const nextConfig = {
     unoptimized: true,
   },
   experimental: {
-    serverComponentsExternalPackages: ['sqlite3', 'fluent-ffmpeg'],
+    serverComponentsExternalPackages: ['fluent-ffmpeg'],
   },
   async rewrites() {
     return [

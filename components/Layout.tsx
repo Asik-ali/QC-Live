@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -10,6 +10,13 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
+  const [role, setRole] = useState<'admin' | 'student'>('admin');
+
+  useEffect(() => {
+    axios.get('/api/auth/me').then((res) => {
+      if (res.data.user?.role) setRole(res.data.user.role);
+    }).catch(() => {});
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -21,9 +28,15 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   const navItems = [
-    { href: '/dashboard', label: 'Dashboard' },
-    { href: '/videos', label: 'Videos' },
-    { href: '/streams', label: 'Streams' },
+    ...(role === 'admin' ? [
+      { href: '/dashboard', label: 'Dashboard' },
+      { href: '/videos', label: 'Videos' },
+      { href: '/streams', label: 'Streams' },
+    ] : []),
+    { href: '/courses', label: 'Courses' },
+    ...(role === 'admin' ? [
+      { href: '/students', label: 'Students' },
+    ] : []),
   ];
 
   return (
@@ -33,9 +46,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex justify-between h-16">
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-foreground">
-                  Asik
-                </h1>
+                <h1 className="text-xl font-bold text-foreground">Asik</h1>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                 {navItems.map((item) => (
@@ -43,7 +54,7 @@ export default function Layout({ children }: LayoutProps) {
                     key={item.href}
                     href={item.href}
                     className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 ${
-                      router.pathname === item.href
+                      router.pathname === item.href || router.pathname.startsWith(item.href + '/')
                         ? 'border-primary text-foreground'
                         : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
                     }`}
@@ -53,7 +64,8 @@ export default function Layout({ children }: LayoutProps) {
                 ))}
               </div>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center space-x-3">
+              <span className="text-xs text-muted-foreground capitalize">{role}</span>
               <button
                 onClick={handleLogout}
                 className="text-sm text-muted-foreground hover:text-foreground"
@@ -72,16 +84,11 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-sm text-muted-foreground">
-                © {new Date().getFullYear()} Asik. All rights reserved.
+                &copy; {new Date().getFullYear()} Asik. All rights reserved.
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 Designed by{' '}
-                <a 
-                  href="https://github.com/himanshu-hivecorp" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
+                <a href="https://github.com/himanshu-hivecorp" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                   Himanshu-HIVEcorp
                 </a>
               </p>

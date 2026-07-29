@@ -8,6 +8,8 @@ export interface SessionData {
   user?: {
     isLoggedIn: boolean;
     username: string;
+    role: 'admin' | 'student';
+    studentId?: number;
   };
 }
 
@@ -50,18 +52,31 @@ export function withSessionSsr<
   };
 }
 
-export async function validateCredentials(username: string, password: string): Promise<boolean> {
+export async function validateCredentials(username: string, password: string): Promise<{ valid: boolean; role?: 'admin' | 'student'; studentId?: number }> {
   const validUsername = config.auth.username;
   const hashedPassword = config.auth.password;
-  
-  if (username !== validUsername) {
-    return false;
+
+  if (username === validUsername) {
+    try {
+      const match = await bcrypt.compare(password, hashedPassword);
+      if (match) return { valid: true, role: 'admin' };
+    } catch (error) {
+      console.error('Error comparing passwords:', error);
+      return { valid: false };
+    }
   }
 
   try {
-    return await bcrypt.compare(password, hashedPassword);
+    const { getDb } = await import('./database');
+    const db = await getDb();
+    const student = await db.get('SELECT * FROM students WHERE username = ?', [username]);
+    if (student) {
+      const match = await bcrypt.compare(password, student.password_hash);
+      if (match) return { valid: true, role: 'student', studentId: student.id };
+    }
   } catch (error) {
-    console.error('Error comparing passwords:', error);
-    return false;
+    console.error('Error validating student:', error);
   }
+
+  return { valid: false };
 }

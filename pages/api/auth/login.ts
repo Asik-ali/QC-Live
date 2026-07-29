@@ -13,9 +13,9 @@ export default async function loginRoute(req: NextApiRequest, res: NextApiRespon
     return res.status(400).json({ error: 'Username and password are required' });
   }
 
-  const isValid = await validateCredentials(username, password);
+  const result = await validateCredentials(username, password);
 
-  if (!isValid) {
+  if (!result.valid) {
     await logActivity('login_failed', `Failed login attempt for username: ${username}`);
     return res.status(401).json({ error: 'Invalid credentials' });
   }
@@ -24,10 +24,15 @@ export default async function loginRoute(req: NextApiRequest, res: NextApiRespon
   session.user = {
     isLoggedIn: true,
     username,
+    role: result.role || 'admin',
   };
 
-  await session.save();
-  await logActivity('login_success', `User ${username} logged in`);
+  if (result.studentId) {
+    session.user.studentId = result.studentId;
+  }
 
-  res.status(200).json({ success: true });
+  await session.save();
+  await logActivity('login_success', `User ${username} logged in as ${result.role}`);
+
+  res.status(200).json({ success: true, role: result.role });
 }
