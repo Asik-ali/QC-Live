@@ -26,8 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       await logActivity('lesson_created', `Lesson "${title}" added to course "${course.title}"`);
       res.json({ id: result.lastID, message: 'Lesson created' });
-    } catch (error: any) {
+    } catch (error) {
       console.error('Failed to create lesson:', error);
-      res.status(500).json({ error: error.message || 'Failed to create lesson' });
+      const msg = error instanceof Error ? error.message : 'Failed to create lesson';
+      res.status(500).json({ error: msg });
+    }
   });
 }

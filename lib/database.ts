@@ -5,8 +5,6 @@ import initSqlJs, { Database as SqlJsDb } from 'sql.js';
 let db: SqlJsDb | null = null;
 let dbPath: string = '';
 let dbInit: Promise<void> | null = null;
-let saveTimeout: ReturnType<typeof setTimeout> | null = null;
-
 interface SqliteResult {
   lastID?: number;
   changes?: number;
@@ -36,11 +34,6 @@ async function saveDb() {
   }
 }
 
-function scheduleSave() {
-  if (saveTimeout) clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(() => { saveDb(); saveTimeout = null; }, 300);
-}
-
 const dbApi = {
   async all(sql: string, params?: any[]): Promise<any[]> {
     if (!db) throw new Error('Database not initialized');
@@ -59,19 +52,17 @@ const dbApi = {
   async run(sql: string, params?: any[]): Promise<SqliteResult> {
     if (!db) throw new Error('Database not initialized');
     db.run(sql, params);
-    scheduleSave();
-    const lastId = db.exec("SELECT last_insert_rowid() as id");
     const changes = db.getRowsModified();
-    return {
-      lastID: lastId.length > 0 ? (lastId[0].values[0] ? Number(lastId[0].values[0][0]) : undefined) : undefined,
-      changes,
-    };
+    const lastId = db.exec("SELECT last_insert_rowid() as id");
+    await saveDb();
+    const lastID = lastId.length > 0 && lastId[0].values.length > 0 ? Number(lastId[0].values[0][0]) : undefined;
+    return { lastID, changes };
   },
 
   async exec(sql: string): Promise<void> {
     if (!db) throw new Error('Database not initialized');
     db.exec(sql);
-    scheduleSave();
+    await saveDb();
   },
 };
 
