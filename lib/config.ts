@@ -2,10 +2,10 @@
 export const config = {
   auth: {
     username: process.env.ADMIN_USERNAME || 'admin',
-    password: process.env.ADMIN_PASSWORD_HASH || '$2a$10$euCxWwVs6F6BnUmGTwH/4.BIHMv.PWZG.kXVRHQCGWyVpzLXAdtka',
+    password: process.env.ADMIN_PASSWORD_HASH || '$2a$10$c5.lcFhm0dyoiWf0f8sRce8cO03/YbyWn/X5E/qCnecPKTKclOHye',
   },
   session: {
-    secret: process.env.SESSION_SECRET || 'a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456',
+    secret: process.env.SESSION_SECRET || 'dr)P6&/Bi$.tW->lY5of+x0d!3yE^(qo',
   },
   storage: {
     uploadDir: process.env.UPLOAD_DIR || './public/uploads',
