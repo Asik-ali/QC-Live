@@ -2,7 +2,7 @@
 export const config = {
   auth: {
     username: process.env.ADMIN_USERNAME || 'admin',
-    password: process.env.ADMIN_PASSWORD_HASH || '$2a$10$0M2kS.y0fXYmUAjme4vNSO2WudtAMT.xg1ItE/Z0kf.MW66XB7/tC',
+    password: process.env.ADMIN_PASSWORD_HASH || '$2a$10$euCxWwVs6F6BnUmGTwH/4.BIHMv.PWZG.kXVRHQCGWyVpzLXAdtka',
   },
   session: {
     secret: process.env.SESSION_SECRET || 'a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456',
