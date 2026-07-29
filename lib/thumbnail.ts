@@ -33,6 +33,27 @@ export async function generateThumbnail(videoPath: string, thumbnailName: string
       path.join(process.cwd(), 'ffmpeg', 'ffmpeg.exe'),
     ];
     
+    // Check winget installation path
+    const localAppData = process.env.LOCALAPPDATA;
+    if (localAppData) {
+      const wingetDir = path.join(localAppData, 'Microsoft', 'WinGet', 'Packages');
+      if (require('fs').existsSync(wingetDir)) {
+        try {
+          const gyanDirs = require('fs').readdirSync(wingetDir).filter(d => d.startsWith('Gyan.FFmpeg'));
+          for (const dir of gyanDirs) {
+            const binDir = path.join(wingetDir, dir);
+            const versionDirs = require('fs').readdirSync(binDir).filter(d => d.startsWith('ffmpeg-'));
+            for (const vDir of versionDirs) {
+              const exePath = path.join(binDir, vDir, 'bin', 'ffmpeg.exe');
+              if (require('fs').existsSync(exePath)) {
+                possiblePaths.push(exePath);
+              }
+            }
+          }
+        } catch {}
+      }
+    }
+    
     for (const p of possiblePaths) {
       if (require('fs').existsSync(p)) {
         ffmpegPath = p;

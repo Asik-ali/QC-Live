@@ -29,7 +29,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
-            QC Live
+            Asik
           </h2>
           <p className="mt-2 text-center text-sm text-muted-foreground">
             Sign in to manage your streams
@@ -96,7 +96,7 @@ export default function LoginPage() {
           </a>
         </p>
         <p className="text-xs text-muted-foreground mt-1">
-          © {new Date().getFullYear()} QC Live • Dev Edition
+          © {new Date().getFullYear()} Asik • Dev Edition
         </p>
       </div>
     </div>

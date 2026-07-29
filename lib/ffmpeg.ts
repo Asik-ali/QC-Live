@@ -75,6 +75,27 @@ export async function startStream(streamId: number, options: StreamOptions): Pro
     path.join(process.cwd(), 'ffmpeg', 'ffmpeg.exe'),
   ];
   
+  // Check winget installation path
+  const localAppData = process.env.LOCALAPPDATA;
+  if (localAppData) {
+    const wingetDir = path.join(localAppData, 'Microsoft', 'WinGet', 'Packages');
+    if (fs.existsSync(wingetDir)) {
+      try {
+        const gyanDirs = fs.readdirSync(wingetDir).filter(d => d.startsWith('Gyan.FFmpeg'));
+        for (const dir of gyanDirs) {
+          const binDir = path.join(wingetDir, dir);
+          const versionDirs = fs.readdirSync(binDir).filter(d => d.startsWith('ffmpeg-'));
+          for (const vDir of versionDirs) {
+            const exePath = path.join(binDir, vDir, 'bin', 'ffmpeg.exe');
+            if (fs.existsSync(exePath)) {
+              possiblePaths.push(exePath);
+            }
+          }
+        }
+      } catch {}
+    }
+  }
+  
   for (const p of possiblePaths) {
     if (fs.existsSync(p)) {
       ffmpegPath = p;

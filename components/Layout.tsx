@@ -34,7 +34,7 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
                 <h1 className="text-xl font-bold text-foreground">
-                  QC Live
+                  Asik
                 </h1>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -72,7 +72,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-sm text-muted-foreground">
-                © {new Date().getFullYear()} QC Live. All rights reserved.
+                © {new Date().getFullYear()} Asik. All rights reserved.
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 Designed by{' '}

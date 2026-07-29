@@ -8,7 +8,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-console.log('QC Live - Password Hash Generator');
+console.log('Asik - Password Hash Generator');
 console.log('=================================\n');
 
 rl.question('Enter password to hash: ', async (password) => {

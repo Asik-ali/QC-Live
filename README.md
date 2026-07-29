@@ -1,4 +1,4 @@
-# QC Live - Professional 24/7 Streaming Application
+# Asik - Professional 24/7 Streaming Application
 
 A powerful, self-hosted streaming application that enables 24/7 live streaming to YouTube, Twitch, and other RTMP platforms.
 
@@ -167,13 +167,13 @@ server {
 ### YouTube
 1. Go to YouTube Studio → Go Live
 2. Copy your Stream Key
-3. Create a new stream in QC Live with YouTube platform
+3. Create a new stream in Asik with YouTube platform
 4. Paste your stream key
 
 ### Twitch
 1. Go to Creator Dashboard → Settings → Stream
 2. Copy your Primary Stream Key
-3. Use Custom RTMP in QC Live
+3. Use Custom RTMP in Asik
 4. Enter: `rtmp://live.twitch.tv/live/YOUR_STREAM_KEY`
 
 ## Troubleshooting
@@ -210,4 +210,4 @@ GitHub: [https://github.com/himanshu-hivecorp](https://github.com/himanshu-hivec
 
 ---
 
-© 2024 QC Live. All rights reserved.
+© 2024 Asik. All rights reserved.

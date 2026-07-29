@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       status: 'healthy',
       timestamp: new Date().toISOString(),
       version: '1.0.0',
-      service: 'QC Live'
+      service: 'Asik'
     });
   } catch (error) {
     res.status(503).json({
