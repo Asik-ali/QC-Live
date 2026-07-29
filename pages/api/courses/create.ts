@@ -7,14 +7,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
     try {
-      const { title, description, instructor, category, difficulty } = req.body;
+      const { title, description, instructor, category, difficulty, videoUrl } = req.body;
       if (!title || !title.trim()) return res.status(400).json({ error: 'Title is required' });
 
       const db = await getDb();
       const result = await db.run(
-        `INSERT INTO courses (title, description, instructor, category, difficulty)
-         VALUES (?, ?, ?, ?, ?)`,
-        [title.trim(), description || null, instructor || 'Instructor', category || 'General', difficulty || 'beginner']
+        `INSERT INTO courses (title, description, instructor, category, difficulty, video_url)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [title.trim(), description || null, instructor || 'Instructor', category || 'General', difficulty || 'beginner', videoUrl || null]
       );
 
       await logActivity('course_created', `Course "${title}" created`);

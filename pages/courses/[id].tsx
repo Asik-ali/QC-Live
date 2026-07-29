@@ -12,7 +12,7 @@ import { getDb } from '@/lib/database';
 interface Course {
   id: number; title: string; description: string | null; instructor: string;
   category: string; difficulty: string; status: string; lesson_count: number;
-  enrollment_count: number; created_at: string;
+  enrollment_count: number; created_at: string; video_url: string | null;
 }
 
 interface Lesson {
@@ -124,6 +124,21 @@ export default function CourseDetail({ initialCourse }: { initialCourse: Course 
                 <span>{course.lesson_count} lessons</span>
                 <span>{course.enrollment_count} enrolled</span>
               </div>
+              {course.video_url && (
+                <div className="mt-4 aspect-video rounded-lg overflow-hidden bg-black">
+                  <iframe
+                    src={course.video_url
+                      .replace('watch?v=', 'embed/')
+                      .replace('youtu.be/', 'youtube.com/embed/')
+                      .replace(/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//, 'https://www.youtube.com/embed/')
+                    }
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title="Course video"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="bg-card border border-border rounded-lg p-6">

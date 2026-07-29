@@ -23,7 +23,7 @@ export default function CoursesPage({ userRole, studentId }: { userRole: string;
   const [courses, setCourses] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ title: '', description: '', instructor: 'Instructor', category: 'General', difficulty: 'beginner' });
+  const [form, setForm] = useState({ title: '', description: '', instructor: 'Instructor', category: 'General', difficulty: 'beginner', videoUrl: '' });
   const isAdmin = userRole === 'admin';
 
   useEffect(() => { fetchCourses(); }, []);
@@ -51,7 +51,7 @@ export default function CoursesPage({ userRole, studentId }: { userRole: string;
     try {
       await axios.post('/api/courses/create', form);
       toast.success('Course created');
-      setForm({ title: '', description: '', instructor: 'Instructor', category: 'General', difficulty: 'beginner' });
+      setForm({ title: '', description: '', instructor: 'Instructor', category: 'General', difficulty: 'beginner', videoUrl: '' });
       setShowForm(false);
       fetchCourses();
     } catch (err: any) {
@@ -131,6 +131,12 @@ export default function CoursesPage({ userRole, studentId }: { userRole: string;
                     <option value="advanced">Advanced</option>
                   </select>
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1">Video URL (YouTube)</label>
+                <input type="url" value={form.videoUrl} onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
+                  className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="https://youtube.com/watch?v=..." />
               </div>
               <button type="submit" className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors">
                 Create Course

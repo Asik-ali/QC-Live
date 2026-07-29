@@ -180,6 +180,8 @@ export async function getDb() {
       );
     `);
 
+    try { db.run(`ALTER TABLE courses ADD COLUMN video_url TEXT`); } catch (e) {}
+
     await saveDb();
   })();
 
