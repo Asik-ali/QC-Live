@@ -3,7 +3,9 @@ import fs from 'fs/promises';
 import initSqlJs, { Database as SqlJsDb } from 'sql.js';
 
 let db: SqlJsDb | null = null;
+let dbPath: string = '';
 let dbInit: Promise<void> | null = null;
+let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
 interface SqliteResult {
   lastID?: number;
@@ -24,21 +26,27 @@ function toSingleResult(stmt: any): any | undefined {
   return rows.length > 0 ? rows[0] : undefined;
 }
 
+async function saveDb() {
+  if (!db || !dbPath) return;
+  try {
+    const data = db.export();
+    await fs.writeFile(dbPath, Buffer.from(data));
+  } catch (e) {
+    console.error('Failed to save database:', e);
+  }
+}
+
+function scheduleSave() {
+  if (saveTimeout) clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => { saveDb(); saveTimeout = null; }, 300);
+}
+
 const dbApi = {
   async all(sql: string, params?: any[]): Promise<any[]> {
     if (!db) throw new Error('Database not initialized');
-    try {
-      const stmt = db.prepare(sql);
-      if (params) stmt.bind(params);
-      return toArrayResult(stmt);
-    } catch (e) {
-      if (db) {
-        const stmt2 = db.prepare(sql);
-        if (params) stmt2.bind(params);
-        return toArrayResult(stmt2);
-      }
-      throw e;
-    }
+    const stmt = db.prepare(sql);
+    if (params) stmt.bind(params);
+    return toArrayResult(stmt);
   },
 
   async get(sql: string, params?: any[]): Promise<any | undefined> {
@@ -51,6 +59,7 @@ const dbApi = {
   async run(sql: string, params?: any[]): Promise<SqliteResult> {
     if (!db) throw new Error('Database not initialized');
     db.run(sql, params);
+    scheduleSave();
     const lastId = db.exec("SELECT last_insert_rowid() as id");
     const changes = db.getRowsModified();
     return {
@@ -62,6 +71,7 @@ const dbApi = {
   async exec(sql: string): Promise<void> {
     if (!db) throw new Error('Database not initialized');
     db.exec(sql);
+    scheduleSave();
   },
 };
 
@@ -75,7 +85,7 @@ export async function getDb() {
 
   dbInit = (async () => {
     const SQL = await initSqlJs();
-    const dbPath = path.resolve(process.env.DATABASE_PATH || './data/streams.db');
+    dbPath = path.resolve(process.env.DATABASE_PATH || './data/streams.db');
     const dbDir = path.dirname(dbPath);
 
     try {
@@ -179,13 +189,7 @@ export async function getDb() {
       );
     `);
 
-    // Save initial DB to disk
-    try {
-      const data = db.export();
-      await fs.writeFile(dbPath, Buffer.from(data));
-    } catch (e) {
-      console.error('Failed to save initial database:', e);
-    }
+    await saveDb();
   })();
 
   await dbInit;
@@ -193,8 +197,8 @@ export async function getDb() {
 }
 
 export async function logActivity(action: string, details?: string) {
-  const db = await getDb();
-  await db.run(
+  const d = await getDb();
+  await d.run(
     'INSERT INTO activity_logs (action, details) VALUES (?, ?)',
     [action, details]
   );
