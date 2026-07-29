@@ -127,11 +127,11 @@ export default function CourseDetail({ initialCourse }: { initialCourse: Course 
               {course.video_url && (
                 <div className="mt-4 aspect-video rounded-lg overflow-hidden bg-black">
                   <iframe
-                    src={course.video_url
-                      .replace('watch?v=', 'embed/')
-                      .replace('youtu.be/', 'youtube.com/embed/')
-                      .replace(/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//, 'https://www.youtube.com/embed/')
-                    }
+                    src={(() => {
+                      const u = course.video_url || '';
+                      const m = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                      return m ? `https://www.youtube.com/embed/${m[1]}` : u;
+                    })()}
                     className="w-full h-full"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
